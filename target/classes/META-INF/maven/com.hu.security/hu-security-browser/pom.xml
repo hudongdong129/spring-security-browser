@@ -10,60 +10,11 @@
   
   
   <dependencies>
-  	<!-- <dependency>
+  	<dependency>
   		<groupId>com.hu.security</groupId>
-  		<artifactId>hu.security.core</artifactId>
+  		<artifactId>hu-security-core</artifactId>
   		<version>${hu.security.version}</version>
-  	</dependency> -->
-  		<dependency>
-  		<groupId>org.springframework.cloud</groupId>
-  		<artifactId>spring-cloud-starter-oauth2</artifactId>
   	</dependency>
-  	<dependency>
-  		<groupId>org.springframework.boot</groupId>
-  		<artifactId>spring-boot-starter-data-redis</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.springframework.boot</groupId>
-  		<artifactId>spring-boot-starter-jdbc</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>mysql</groupId>
-  		<artifactId>mysql-connector-java</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.springframework.social</groupId>
-  		<artifactId>spring-social-config</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.springframework.social</groupId>
-  		<artifactId>spring-social-core</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.springframework.social</groupId>
-  		<artifactId>spring-social-security</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.springframework.social</groupId>
-  		<artifactId>spring-social-web</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>commons-lang</groupId>
-  		<artifactId>commons-lang</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>commons-collections</groupId>
-  		<artifactId>commons-collections</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>commons-beanutils</groupId>
-  		<artifactId>commons-beanutils</artifactId>
-  	</dependency>
-  	
-  	<dependency>
-		<groupId>org.springframework.session</groupId>
-		<artifactId>spring-session</artifactId>
-		<version>1.3.3.RELEASE</version>
-	</dependency>
+  		
   </dependencies>
 </project>
