@@ -16,6 +16,7 @@ import org.springframework.security.web.authentication.ExceptionMappingAuthentic
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hu.security.browser.support.SimpleResponse;
 import com.hu.security.core.properties.LoginType;
 import com.hu.security.core.properties.SecurityProperties;
 
@@ -39,7 +40,7 @@ public class ImoocAuthenticationFailureHandler extends ExceptionMappingAuthentic
 			
 			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
 			response.setContentType("application/json;charset=UTF-8");
-			response.getWriter().write(objectMapper.writeValueAsString(exception));
+			response.getWriter().write(objectMapper.writeValueAsString(new SimpleResponse(exception.getMessage())));
 		} else {
 			super.onAuthenticationFailure(request, response, exception);
 		}
