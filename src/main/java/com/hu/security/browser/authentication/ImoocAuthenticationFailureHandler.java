@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hu.security.browser.support.SimpleResponse;
 import com.hu.security.core.properties.LoginType;
 import com.hu.security.core.properties.SecurityProperties;
-
+//spring的组件
 @Component("imoocAuthenticationFailureHandler")
 public class ImoocAuthenticationFailureHandler extends ExceptionMappingAuthenticationFailureHandler {
 

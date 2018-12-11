@@ -37,6 +37,7 @@ public class ImoocAuthenticationSuccessHandler extends SavedRequestAwareAuthenti
 	private SecurityProperties securityProperties;
 	
 	/* (non-Javadoc)
+	 * Authentication 封装的用户信息
 	 * @see org.springframework.security.web.authentication.AuthenticationSuccessHandler#onAuthenticationSuccess(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.springframework.security.core.Authentication)
 	 */
 	@Override
