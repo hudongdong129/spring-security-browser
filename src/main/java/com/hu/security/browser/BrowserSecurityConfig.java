@@ -22,13 +22,15 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import com.hu.security.core.properties.SecurityProperties;
 import com.hu.security.core.validate.code.ValidateCodeFilter;
 
+//import com.hu.security.core.properties.SecurityProperties;
+//import com.hu.security.core.validate.code.ValidateCodeFilter;
+
 /**
  * @author Administrator
  *
  */
 @Configuration
 public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
-
 	
 	@Autowired
 	private SecurityProperties securityProperties;
@@ -36,21 +38,28 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private AuthenticationSuccessHandler imoocAuthenticationSuccessHandler;
 	
+	
 	@Autowired
 	private AuthenticationFailureHandler imoocAuthenticationFailureHandler;
-	
-	
-	@Autowired
-	private DataSource dataSource;
 	
 	@Autowired
 	private UserDetailsService userDetailsService;
 	
+	@Autowired
+	private DataSource dataSource;
+	/**
+	 * 注入password
+	 * @return
+	 */
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 	
+	/**
+	 * 记住我的功能需要
+	 * @return
+	 */
 	@Bean
 	public PersistentTokenRepository persistentTokenRepository() {
 		JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
@@ -58,7 +67,6 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 //		tokenRepository.setCreateTableOnStartup(true);
 		return tokenRepository;
 	}
-	
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -69,19 +77,17 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 		validateCodeFilter.afterPropertiesSet();
 		
 		
-		
 		http.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
-			.formLogin()
-				.loginPage("/authentication/require")
-				.loginProcessingUrl("/authentication/form")
-				.successHandler(imoocAuthenticationSuccessHandler)
-				.failureHandler(imoocAuthenticationFailureHandler)
-				.and()
-			.rememberMe()
-				.tokenRepository(persistentTokenRepository())
-				.tokenValiditySeconds(securityProperties.getBrowser().getRememberMeSeconds())
-				.userDetailsService(userDetailsService)
-//		http.httpBasic()
+		.formLogin()
+			.loginPage("/authentication/require")
+			.loginProcessingUrl("/authentication/form")
+			.successHandler(imoocAuthenticationSuccessHandler) //替换成功处理器的行为
+			.failureHandler(imoocAuthenticationFailureHandler)
+			.and()
+		.rememberMe()
+			.tokenRepository(persistentTokenRepository())
+			.tokenValiditySeconds(securityProperties.getBrowser().getRememberMeSeconds())
+			.userDetailsService(userDetailsService)
 			.and()
 			.authorizeRequests()
 			.antMatchers("/authentication/require",
@@ -92,6 +98,68 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 			.csrf().disable();
 	}
+//	@Autowired
+//	private SecurityProperties securityProperties;
+//	
+//	@Autowired
+//	private AuthenticationSuccessHandler imoocAuthenticationSuccessHandler;
+//	
+//	@Autowired
+//	private AuthenticationFailureHandler imoocAuthenticationFailureHandler;
+//	
+//	
+//	@Autowired
+//	private DataSource dataSource;
+//	
+//	@Autowired
+//	private UserDetailsService userDetailsService;
+//	
+//	@Bean
+//	public PasswordEncoder passwordEncoder() {
+//		return new BCryptPasswordEncoder();
+//	}
+//	
+//	@Bean
+//	public PersistentTokenRepository persistentTokenRepository() {
+//		JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+//		tokenRepository.setDataSource(dataSource);
+////		tokenRepository.setCreateTableOnStartup(true);
+//		return tokenRepository;
+//	}
+//	
+//	
+//	@Override
+//	protected void configure(HttpSecurity http) throws Exception {
+//		
+//		ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
+//		validateCodeFilter.setAuthenticationFailureHandler(imoocAuthenticationFailureHandler);
+//		validateCodeFilter.setSecurityProperties(securityProperties);
+//		validateCodeFilter.afterPropertiesSet();
+//		
+//		
+//		
+//		http.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
+//			.formLogin()
+//				.loginPage("/authentication/require")
+//				.loginProcessingUrl("/authentication/form")
+//				.successHandler(imoocAuthenticationSuccessHandler)
+//				.failureHandler(imoocAuthenticationFailureHandler)
+//				.and()
+//			.rememberMe()
+//				.tokenRepository(persistentTokenRepository())
+//				.tokenValiditySeconds(securityProperties.getBrowser().getRememberMeSeconds())
+//				.userDetailsService(userDetailsService)
+////		http.httpBasic()
+//			.and()
+//			.authorizeRequests()
+//			.antMatchers("/authentication/require",
+//					securityProperties.getBrowser().getLoginPage(),
+//					"/code/*").permitAll()
+//			.anyRequest()
+//			.authenticated()
+//			.and()
+//			.csrf().disable();
+//	}
 	
 
 }

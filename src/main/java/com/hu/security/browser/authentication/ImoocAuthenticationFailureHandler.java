@@ -13,15 +13,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hu.security.browser.support.SimpleResponse;
 import com.hu.security.core.properties.LoginType;
 import com.hu.security.core.properties.SecurityProperties;
+
+
+
 //spring的组件
 @Component("imoocAuthenticationFailureHandler")
-public class ImoocAuthenticationFailureHandler extends ExceptionMappingAuthenticationFailureHandler {
+public class ImoocAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -31,13 +35,14 @@ public class ImoocAuthenticationFailureHandler extends ExceptionMappingAuthentic
 	@Autowired
 	private SecurityProperties securityProperties;
 	
+	/**
+	 * AuthenticationException 认证过程中产生的异常
+	 */
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException exception) throws IOException, ServletException {
 		logger.info("登录失败");
-		
 		if (LoginType.JSON.equals(securityProperties.getBrowser().getLoginType())) {
-			
 			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
 			response.setContentType("application/json;charset=UTF-8");
 			response.getWriter().write(objectMapper.writeValueAsString(new SimpleResponse(exception.getMessage())));
@@ -45,7 +50,32 @@ public class ImoocAuthenticationFailureHandler extends ExceptionMappingAuthentic
 			super.onAuthenticationFailure(request, response, exception);
 		}
 		
-		
 	}
+
+	
+	
+	
+//	@Autowired
+//	private ObjectMapper objectMapper;
+//	
+//	@Autowired
+//	private SecurityProperties securityProperties;
+//	
+//	@Override
+//	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
+//			AuthenticationException exception) throws IOException, ServletException {
+//		logger.info("登录失败");
+//		
+//		if (LoginType.JSON.equals(securityProperties.getBrowser().getLoginType())) {
+//			
+//			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+//			response.setContentType("application/json;charset=UTF-8");
+//			response.getWriter().write(objectMapper.writeValueAsString(new SimpleResponse(exception.getMessage())));
+//		} else {
+//			super.onAuthenticationFailure(request, response, exception);
+//		}
+//		
+//		
+//	}
 
 }
