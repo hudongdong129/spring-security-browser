@@ -21,6 +21,7 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 
 import com.hu.security.core.properties.SecurityProperties;
 import com.hu.security.core.validate.code.ValidateCodeFilter;
+import org.springframework.social.security.SpringSocialConfigurer;
 
 //import com.hu.security.core.properties.SecurityProperties;
 //import com.hu.security.core.validate.code.ValidateCodeFilter;
@@ -47,6 +48,11 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private DataSource dataSource;
+
+	@Autowired
+	private SpringSocialConfigurer imoocSocialSecurityConfig;
+
+
 	/**
 	 * 注入password
 	 * @return
@@ -72,7 +78,7 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		
 		ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
-		validateCodeFilter.setAuthenticationFailureHandler(imoocAuthenticationFailureHandler);
+//		validateCodeFilter.setAuthenticationFailureHandler(imoocAuthenticationFailureHandler);
 		validateCodeFilter.setSecurityProperties(securityProperties);
 		validateCodeFilter.afterPropertiesSet();
 		
@@ -92,11 +98,15 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 			.antMatchers("/authentication/require",
 					securityProperties.getBrowser().getLoginPage(),
-					"/code/*").permitAll()
+					"/code/*",
+					securityProperties.getBrowser().getSignUpUrl(),
+					"/user/regist").permitAll()
 			.anyRequest()
 			.authenticated()
 			.and()
-			.csrf().disable();
+			.csrf().disable()
+				.apply(imoocSocialSecurityConfig);
+
 	}
 //	@Autowired
 //	private SecurityProperties securityProperties;

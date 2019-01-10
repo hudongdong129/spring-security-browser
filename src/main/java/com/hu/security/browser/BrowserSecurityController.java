@@ -8,6 +8,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.hu.security.browser.support.SocialUserInfo;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,12 +19,16 @@ import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
+import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.web.ProviderSignInUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hu.security.browser.support.SimpleResponse;
 import com.hu.security.core.properties.SecurityProperties;
+import org.springframework.web.context.request.ServletWebRequest;
 
 //import com.hu.security.browser.support.SimpleResponse;
 //import com.hu.security.core.properties.SecurityProperties;
@@ -43,6 +48,9 @@ public class BrowserSecurityController {
 	
 	@Autowired
 	private SecurityProperties securityProperties;
+
+	@Autowired
+	private ProviderSignInUtils providerSignInUtils;
 	
 	/**
 	 * 
@@ -67,6 +75,19 @@ public class BrowserSecurityController {
 		return new SimpleResponse("访问的服务需要身份认证，请引导用户到登陆页");
 		
 	}
+
+	@GetMapping("/social/user")
+	public SocialUserInfo getSocialUserInfo(HttpServletRequest request) {
+		SocialUserInfo userInfo = new SocialUserInfo();
+		Connection<?> connection = providerSignInUtils.getConnectionFromSession(new ServletWebRequest(request));
+		userInfo.setProviderUserId(connection.getKey().getProviderUserId());
+		userInfo.setProviderId(connection.getKey().getProviderId());
+		userInfo.setNickName(connection.getDisplayName());
+		userInfo.setHeadimg(connection.getImageUrl());
+		return userInfo;
+	}
+
+
 	
 //	private RequestCache requestCache = new HttpSessionRequestCache();
 //	
